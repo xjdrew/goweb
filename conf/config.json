@@ -1,0 +1,9 @@
+{
+    "secret": "3Fnl17Fe84jGXAtMbs7Blbydo911pSQMn6L299HWy4GSN2hgHQM/FQ",
+    "public_path": "./smg/public",
+    "template_path": "./smg/app/views",
+    "database": {
+        "hosts": "localhost",
+        "database": "servers"
+    }
+}

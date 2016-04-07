@@ -1,0 +1,9 @@
+{
+    "secret": "secret",
+    "public_path": "./smg/public",
+    "template_path": "./smg/app/views",
+    "database": {
+        "hosts": "localhost",
+        "database": "servers"
+    }
+}
