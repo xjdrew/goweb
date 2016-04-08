@@ -3,10 +3,12 @@ package main
 import (
 	"flag"
 	"log"
+	"net/http"
 	"os"
 
 	"tea.ejoy.com/LR/smg/app/controllers"
 	"tea.ejoy.com/LR/smg/app/core"
+	"tea.ejoy.com/LR/smg/app/utils"
 )
 
 func usage() {
@@ -33,6 +35,8 @@ func main() {
 	defer app.Fini()
 
 	r := app.Router
+	hc := &controllers.HomeController{}
+	r.HandleFunc("/", app.WrapRoute(hc.Index))
 
 	s := r.PathPrefix("/server").Subrouter()
 	sc := &controllers.ServerController{}
@@ -41,5 +45,8 @@ func main() {
 	s.HandleFunc("/update", app.WrapRoute(sc.Update))
 	s.HandleFunc("/delete", app.WrapRoute(sc.Delete))
 
-	log.Println(app.Run(*listen))
+	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets", http.FileServer(http.Dir(app.Settings.PublicPath))))
+
+	h := utils.UseMiddleware(r, app.ApplySession, app.ApplyTemplate)
+	log.Println(http.ListenAndServe(*listen, h))
 }

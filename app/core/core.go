@@ -22,7 +22,7 @@ type contextKey int
 const (
 	appKey contextKey = iota
 	sessionKey
-	contentTypeKey // content type
+	templateKey
 )
 
 type Application struct {
@@ -76,20 +76,21 @@ func (app *Application) Fini() {
 	}
 }
 
-func (app *Application) WrapRoute(f func(*http.Request) (string, int)) http.HandlerFunc {
+func (app *Application) WrapRoute(f func(*C, *http.Request) (string, int)) http.HandlerFunc {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		context.Set(r, appKey, app)
 
-		body, code := f(r)
+		c := NewC()
+		body, code := f(c, r)
 
 		if session, ok := context.GetOk(r, sessionKey); ok {
-			s := session.(sessions.Session)
+			s := session.(*sessions.Session)
 			s.Save(r, w)
 		}
 
 		switch code {
 		case http.StatusOK:
-			if ct, ok := context.GetOk(r, contentTypeKey); ok {
+			if ct, ok := c.Env["Content-Type"]; ok {
 				w.Header().Set("Content-Type", ct.(string))
 			} else {
 				w.Header().Set("Content-Type", "text/html")
@@ -103,10 +104,6 @@ func (app *Application) WrapRoute(f func(*http.Request) (string, int)) http.Hand
 		}
 	}
 	return fn
-}
-
-func (app *Application) Run(listen string) error {
-	return http.ListenAndServe(listen, app.Router)
 }
 
 func NewApplication(file string) (*Application, error) {

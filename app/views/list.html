@@ -1,0 +1,51 @@
+{{define "server_list"}}
+{{template "header" .}}
+<div class="container">
+<h2>服务器列表</h2>
+  <p>目前数据库中所有的服务器</p>
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>名字</th>
+        <th>状态</th>
+        <th>隐</th>
+        <th>禁</th>
+        <th>最大在线</th>
+        <th>默认</th>
+        <th>合服</th>
+        <th>设备</th>
+        <th>平台</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>世外桃源</td>
+        <td>0</td>
+        <td>否</td>
+        <td>否</td>
+        <td>1000</td>
+        <td>20</td>
+        <td>0</td>
+        <td>iOS</td>
+        <td>陌陌</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>世外桃源</td>
+        <td>0</td>
+        <td>否</td>
+        <td>否</td>
+        <td>1000</td>
+        <td>20</td>
+        <td>0</td>
+        <td>iOS</td>
+        <td>陌陌</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{{template "footer" .}}
+{{end}}
+
