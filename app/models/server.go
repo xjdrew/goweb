@@ -6,8 +6,8 @@ import (
 )
 
 type Server struct {
-	ID           bson.ObjectId `bson:"_id,omitempty"`
-	Serverid     int           `bson:"serverid"`
+	ID           bson.ObjectId `bson:"_id,omitempty" schema:"-"`
+	Serverid     int           `bson:"serverid" schema:"-"`
 	Name         string        `bson:"name"`
 	Status       int           `bson:"status"`
 	Hidden       bool          `bson:"hidden"`
@@ -44,4 +44,11 @@ func UpdateServer(db *mgo.Database, server *Server) error {
 		},
 	}
 	return db.C("server").UpdateId(server.ID, change)
+}
+
+func NewServer() *Server {
+	server := new(Server)
+	server.Status = 1
+	server.MaxOnline = 10000
+	return server
 }

@@ -23,3 +23,7 @@ func (controller *Controller) GetTemplate(r *http.Request) *template.Template {
 func (controller *Controller) GetDatabase(r *http.Request) *mgo.Database {
 	return nil
 }
+
+func (controller *Controller) IsPost(r *http.Request) bool {
+	return r.Method == "POST"
+}

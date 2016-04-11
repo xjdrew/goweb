@@ -67,7 +67,10 @@ func (app *Application) Init() {
 	app.loadTemplates()
 	app.initDatabase()
 	app.Store = sessions.NewCookieStore([]byte(app.Settings.Secret))
-	app.Router = mux.NewRouter()
+
+	r := mux.NewRouter()
+	r.StrictSlash(true)
+	app.Router = r
 }
 
 func (app *Application) Fini() {
@@ -87,6 +90,8 @@ func (app *Application) WrapRoute(f func(*C, *http.Request) (string, int)) http.
 			s := session.(*sessions.Session)
 			s.Save(r, w)
 		}
+
+		log.Printf("%s - %s - %d", r.Method, r.URL.String(), code)
 
 		switch code {
 		case http.StatusOK:

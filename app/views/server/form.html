@@ -1,0 +1,81 @@
+{{define "server_form"}}
+  <form class="form-horizontal" role="form" method="post">
+    {{range .Flash}}
+      <div class="alert alert-danger">{{.}}</div><p>
+    {{end}}
+{{with .Server}}
+    {{with .Serverid}}
+    <div class="form-group">
+      <label class="control-label col-sm-2">id:</label>
+      <div class="col-sm-10">
+        <span class="text-primary">{{.}}</span>
+      </div>
+    </div>
+    {{end}}
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="name">名字:</label>
+      <div class="col-sm-10"> 
+        <input type="text" class="form-control" id="name" name="Name" value="{{.Name}}" placeholder="服务器名字">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">状态:</label>
+      <div class="col-sm-10">
+        <input data-status-value="1" type="checkbox" data-on-color="success" data-size="mini" data-label-text="新">
+        <input data-status-value="2" type="checkbox" data-on-color="danger" data-size="mini" data-label-text="热">
+        <input type="hidden" name="Status" value="{{.Status}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">隐藏:</label>
+      <div class="col-sm-10"> 
+        <input type="checkbox" name="Hidden" {{if .Hidden}}checked{{end}} />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">禁止注册:</label>
+      <div class="col-sm-10"> 
+        <input type="checkbox" name="Forbidden" {{if .Forbidden}}checked{{end}} />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">最大在线:</label>
+      <div class="col-sm-10"> 
+        <input type="text" class="form-control" name="MaxOnline" value="{{.MaxOnline}}" placeholder="填写最大在线数">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">默认:</label>
+      <div class="col-sm-10"> 
+        <input type="text" class="form-control" name="Default" value="{{.Default}}" placeholder="成为默认服务器的几率">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">支持设备:</label>
+      <div class="col-sm-10"> 
+        <input type="radio" name="Device" data-label-text="All" value="0" {{if eq .Device 0}}checked{{end}}>
+        <input type="radio" name="Device" data-label-text="iOS" value="1" {{if eq .Device 1}}checked{{end}}>
+        <input type="radio" name="Device" data-label-text="Android" value="2" {{if eq .Device 2}}checked{{end}}>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">平台限制:</label>
+      <div class="col-sm-10"> 
+        <input type="text" class="form-control" name="Platform" value="{{.Platform}}" placeholder="填写最大在线数">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">合服id:</label>
+      <div class="col-sm-10"> 
+        <input type="text" class="form-control" name="RealServerid" value="{{.RealServerid}}" placeholder="填写最大在线数">
+      </div>
+    </div>
+    <div class="form-group"> 
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+    </div>
+{{end}}
+    <script src="/assets/js/server-form.js"></script>
+  </form>
+{{end}}

@@ -43,7 +43,6 @@ func main() {
 	s.HandleFunc("/", app.WrapRoute(sc.List))
 	s.HandleFunc("/add", app.WrapRoute(sc.Add))
 	s.HandleFunc("/update", app.WrapRoute(sc.Update))
-	s.HandleFunc("/delete", app.WrapRoute(sc.Delete))
 
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets", http.FileServer(http.Dir(app.Settings.PublicPath))))
 
