@@ -4,6 +4,6 @@
     "template_path": "./smg/app/views",
     "database": {
         "hosts": "localhost",
-        "database": "servers"
+        "database": "server"
     }
 }
