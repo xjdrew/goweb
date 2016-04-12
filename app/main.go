@@ -42,10 +42,10 @@ func main() {
 	sc := &controllers.ServerController{}
 	s.HandleFunc("/", app.WrapRoute(sc.List))
 	s.HandleFunc("/add", app.WrapRoute(sc.Add))
-	s.HandleFunc("/update", app.WrapRoute(sc.Update))
+	s.HandleFunc("/update/{id:[0-9]+}", app.WrapRoute(sc.Update))
 
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets", http.FileServer(http.Dir(app.Settings.PublicPath))))
 
-	h := utils.UseMiddleware(r, app.ApplySession, app.ApplyTemplate)
+	h := utils.UseMiddleware(r, app.ApplySession, app.ApplyTemplate, app.ApplyDatabase)
 	log.Println(http.ListenAndServe(*listen, h))
 }

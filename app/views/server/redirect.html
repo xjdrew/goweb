@@ -1,0 +1,13 @@
+{{define "server.redirect"}}
+{{template "header" .}}
+<div class="container">
+<h2>返回</h2>
+<div class="well">
+<p>成功，id:{{.Serverid}}</p>
+</div>
+<p>点击<a href="/server">此处</a>返回列表</p>
+</div>
+{{template "footer" .}}
+{{end}}
+
+

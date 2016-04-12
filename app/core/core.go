@@ -23,6 +23,7 @@ const (
 	appKey contextKey = iota
 	sessionKey
 	templateKey
+	databaseKey
 )
 
 type Application struct {

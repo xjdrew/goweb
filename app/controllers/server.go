@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -9,7 +8,18 @@ import (
 
 	"tea.ejoy.com/LR/smg/app/core"
 	"tea.ejoy.com/LR/smg/app/models"
-	"tea.ejoy.com/LR/smg/app/utils"
+)
+
+type serverKey int
+
+const (
+	addServerKey = iota
+	updateServerKey
+)
+
+const (
+	addServerFlashKey    = "AddServer"
+	updateServerFlashKey = "UpdateServer"
 )
 
 type ServerController struct {
@@ -17,62 +27,114 @@ type ServerController struct {
 }
 
 func (controller *ServerController) List(c *core.C, r *http.Request) (string, int) {
-	t := controller.GetTemplate(r)
-
-	c.Env["Title"] = "列表"
-	content, err := utils.Parse(t, "server_list", c.Env)
+	db := controller.GetDatabase(r)
+	servers, err := models.LoadServers(db)
 	if err != nil {
 		return err.Error(), http.StatusInternalServerError
 	}
-	return content, http.StatusOK
+
+	c.Env["Title"] = "列表"
+	c.Env["Servers"] = servers
+	return controller.ReturnTemplate(r, "server.list", c)
 }
 
 func (controller *ServerController) Add(c *core.C, r *http.Request) (string, int) {
-	session := controller.GetSession(r)
+	c.Env["Title"] = "添加"
 
+	session := controller.GetSession(r)
 	if controller.IsPost(r) {
 		if err := r.ParseForm(); err != nil {
-			session.AddFlash(err.Error(), "AddServer")
+			session.AddFlash(err.Error(), addServerFlashKey)
 			return r.URL.String(), http.StatusSeeOther
 		}
-
-		log.Printf("%+v", r.PostForm)
 
 		server := models.NewServer()
 		decoder := schema.NewDecoder()
 		if err := decoder.Decode(server, r.PostForm); err != nil {
-			session.Values["Server"] = server
-			session.AddFlash(err.Error(), "AddServer")
+			session.Values[addServerKey] = server
+			session.AddFlash(err.Error(), addServerFlashKey)
 			return r.URL.String(), http.StatusSeeOther
 		}
 
-		return fmt.Sprintf("%+v", server), http.StatusOK
+		log.Printf("add: %+v", server)
+
+		db := controller.GetDatabase(r)
+		err, serverid := models.AllocServerId(db)
+		if err != nil {
+			session.Values[addServerKey] = server
+			session.AddFlash(err.Error(), addServerFlashKey)
+			return r.URL.String(), http.StatusSeeOther
+		}
+		server.Serverid = serverid
+
+		err = models.InsertServer(db, server)
+		if err != nil {
+			session.Values[addServerKey] = server
+			session.AddFlash(err.Error(), addServerFlashKey)
+			return r.URL.String(), http.StatusSeeOther
+		}
+		delete(session.Values, addServerKey)
+
+		c.Env["Serverid"] = serverid
+		return controller.ReturnTemplate(r, "server.redirect", c)
 	} else {
-		t := controller.GetTemplate(r)
+		c.Env["Flash"] = session.Flashes(addServerFlashKey)
 
-		c.Env["Title"] = "添加"
-		c.Env["Flash"] = session.Flashes("AddServer")
-
-		if server, ok := session.Values["Server"]; ok {
+		if server, ok := session.Values[addServerKey]; ok {
 			c.Env["Server"] = server
 		} else {
 			c.Env["Server"] = models.NewServer()
 		}
 
-		content, err := utils.Parse(t, "server_add", c.Env)
-		if err != nil {
-			return err.Error(), http.StatusInternalServerError
-		}
-		return content, http.StatusOK
+		return controller.ReturnTemplate(r, "server.add", c)
 	}
 }
 
 func (controller *ServerController) Update(c *core.C, r *http.Request) (string, int) {
-	t := controller.GetTemplate(r)
 	c.Env["Title"] = "更新"
-	content, err := utils.Parse(t, "server_update", c.Env)
-	if err != nil {
-		return err.Error(), http.StatusInternalServerError
+
+	session := controller.GetSession(r)
+	db := controller.GetDatabase(r)
+
+	if controller.IsPost(r) {
+		if err := r.ParseForm(); err != nil {
+			session.AddFlash(err.Error(), updateServerFlashKey)
+			return r.URL.String(), http.StatusSeeOther
+		}
+
+		server := models.NewServer()
+		decoder := schema.NewDecoder()
+		if err := decoder.Decode(server, r.PostForm); err != nil {
+			session.Values[updateServerKey] = server
+			session.AddFlash(err.Error(), updateServerFlashKey)
+			return r.URL.String(), http.StatusSeeOther
+		}
+
+		log.Printf("update: %+v", server)
+
+		if err := models.UpdateServer(db, server); err != nil {
+			session.Values[updateServerKey] = server
+			session.AddFlash(err.Error(), updateServerFlashKey)
+			return r.URL.String(), http.StatusSeeOther
+		}
+		delete(session.Values, updateServerKey)
+
+		c.Env["Serverid"] = server.Serverid
+		return controller.ReturnTemplate(r, "server.redirect", c)
+	} else {
+		serverid := controller.GetVarInt(r, "id")
+		if old, ok := session.Values[updateServerKey].(*models.Server); ok && old.Serverid == serverid {
+			c.Env["Server"] = old
+		} else {
+			server, err := models.GetServer(db, serverid)
+			if err != nil {
+				session.AddFlash(err.Error(), updateServerFlashKey)
+			} else {
+				c.Env["Server"] = server
+			}
+		}
+		c.Env["Flash"] = session.Flashes(updateServerFlashKey)
+
+		return controller.ReturnTemplate(r, "server.update", c)
 	}
-	return content, http.StatusOK
 }

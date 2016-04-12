@@ -1,4 +1,4 @@
-{{define "server_form"}}
+{{define "server.form"}}
   <form class="form-horizontal" role="form" method="post">
     {{range .Flash}}
       <div class="alert alert-danger">{{.}}</div><p>
@@ -9,6 +9,7 @@
       <label class="control-label col-sm-2">id:</label>
       <div class="col-sm-10">
         <span class="text-primary">{{.}}</span>
+        <input type="hidden" name="Serverid" value="{{.}}">
       </div>
     </div>
     {{end}}
@@ -29,13 +30,13 @@
     <div class="form-group">
       <label class="control-label col-sm-2">隐藏:</label>
       <div class="col-sm-10"> 
-        <input type="checkbox" name="Hidden" {{if .Hidden}}checked{{end}} />
+        <input type="checkbox" data-size="mini" name="Hidden" {{if .Hidden}}checked{{end}} />
       </div>
     </div>
     <div class="form-group">
       <label class="control-label col-sm-2">禁止注册:</label>
       <div class="col-sm-10"> 
-        <input type="checkbox" name="Forbidden" {{if .Forbidden}}checked{{end}} />
+        <input type="checkbox" data-size="mini" name="Forbidden" {{if .Forbidden}}checked{{end}} />
       </div>
     </div>
     <div class="form-group">
@@ -53,21 +54,23 @@
     <div class="form-group">
       <label class="control-label col-sm-2">支持设备:</label>
       <div class="col-sm-10"> 
-        <input type="radio" name="Device" data-label-text="All" value="0" {{if eq .Device 0}}checked{{end}}>
-        <input type="radio" name="Device" data-label-text="iOS" value="1" {{if eq .Device 1}}checked{{end}}>
-        <input type="radio" name="Device" data-label-text="Android" value="2" {{if eq .Device 2}}checked{{end}}>
+        <input type="radio" data-size="mini" name="Device" data-label-text="All" value="0" {{if eq .Device 0}}checked{{end}}>
+        <input type="radio" data-size="mini" name="Device" data-label-text="iOS" value="1" {{if eq .Device 1}}checked{{end}}>
+        <input type="radio" data-size="mini" name="Device" data-label-text="Android" value="2" {{if eq .Device 2}}checked{{end}}>
       </div>
     </div>
     <div class="form-group">
       <label class="control-label col-sm-2">平台限制:</label>
       <div class="col-sm-10"> 
-        <input type="text" class="form-control" name="Platform" value="{{.Platform}}" placeholder="填写最大在线数">
+        <input type="radio" data-size="mini" name="Platform" data-label-text="Unlimited" value="0" {{if eq .Platform 0}}checked{{end}}>
+        <input type="radio" data-size="mini" name="Platform" data-label-text="Ejoy" value="1" {{if eq .Platform 1}}checked{{end}}>
+        <input type="radio" data-size="mini" name="Platform" data-label-text="MOMO" value="2" {{if eq .Platform 2}}checked{{end}}>
       </div>
     </div>
     <div class="form-group">
       <label class="control-label col-sm-2">合服id:</label>
       <div class="col-sm-10"> 
-        <input type="text" class="form-control" name="RealServerid" value="{{.RealServerid}}" placeholder="填写最大在线数">
+        <input type="text" class="form-control" name="RealServerid" value="{{.RealServerid}}" placeholder="合服后的真实serverid">
       </div>
     </div>
     <div class="form-group"> 

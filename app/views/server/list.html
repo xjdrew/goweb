@@ -1,4 +1,4 @@
-{{define "server_list"}}
+{{define "server.list"}}
 {{template "header" .}}
 <div class="container">
 <h2>服务器列表</h2>
@@ -13,38 +13,68 @@
         <th>禁</th>
         <th>最大在线</th>
         <th>默认</th>
-        <th>合服</th>
         <th>设备</th>
         <th>平台</th>
+        <th>合服</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
+    {{range .Servers}}
       <tr>
-        <td>1</td>
-        <td>世外桃源</td>
-        <td>0</td>
-        <td>否</td>
-        <td>否</td>
-        <td>1000</td>
-        <td>20</td>
-        <td>0</td>
-        <td>iOS</td>
-        <td>陌陌</td>
+       <td>{{.Serverid}}</td>
+       <td>{{.Name}}</td>
+        <td>
+            {{if .IsNew}}
+            <span class="text-success">新</span>
+            {{end}}
+            {{if .IsHot}}
+            <span class="text-danger">热</span>
+            {{end}}
+        </td>
+        <td>
+            {{if .Hidden}}
+            <span class="text-muted">是</span>
+            {{else}}
+            否
+            {{end}}
+        </td>
+        <td>
+            {{if .Forbidden}}
+            <span class="text-muted">是</span>
+            {{else}}
+            否
+            {{end}}
+        </td>
+        <td>{{.MaxOnline}}</td>
+        <td>{{.Default}}</td>
+        <td>
+            {{if eq .Device 0}}
+            All
+            {{else if eq .Device 1}}
+            iOS
+            {{else}}
+            Android
+            {{end}}
+        </td>
+        <td>
+            {{if eq .Platform 0}}
+            Unlimited
+            {{else if eq .Platform 1}}
+            Ejoy
+            {{else}}
+            MOMO
+            {{end}}
+        </td>
+        <td>{{.RealServerid}}</td>
+        <td><a href="/server/update/{{.Serverid}}">修改</a></td>
       </tr>
-      <tr>
-        <td>2</td>
-        <td>世外桃源</td>
-        <td>0</td>
-        <td>否</td>
-        <td>否</td>
-        <td>1000</td>
-        <td>20</td>
-        <td>0</td>
-        <td>iOS</td>
-        <td>陌陌</td>
-      </tr>
+    {{end}}
     </tbody>
   </table>
+  <p>
+  <a href="/server/add">添加新的服务器</a>
+  </p>
 </div>
 {{template "footer" .}}
 {{end}}
