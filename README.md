@@ -1,10 +1,10 @@
 Goweb
 =====
-goweb is a simple websites based on [gorila toolkit](http://www.gorillatoolkit.org/) aiming to explain how to use gorilla toolkit.
+goweb is a simple website based on [gorila toolkit](http://www.gorillatoolkit.org/) aiming to explain how to use gorilla toolkit.
 
-it's similiar to [elcct's defaultproject](https://github.com/elcct/defaultproject), but goweb don't use goji. 
+it's similiar to [elcct's defaultproject](https://github.com/elcct/defaultproject), but don't depend on [goji](http://goji.io/). 
 
-goweb includes a simple middle and templates implemention.
+goweb show a simple way to use middleware and template with gorilla.
 
 build
 -----
