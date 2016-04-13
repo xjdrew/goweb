@@ -6,8 +6,8 @@ import (
 
 	"github.com/gorilla/schema"
 
-	"tea.ejoy.com/LR/smg/app/core"
-	"tea.ejoy.com/LR/smg/app/models"
+	"github.com/xjdrew/goweb/app/core"
+	"github.com/xjdrew/goweb/app/models"
 )
 
 type serverKey int

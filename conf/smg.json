@@ -1,9 +1,0 @@
-{
-    "secret": "3Fnl17Fe84jGXAtMbs7Blbydo911pSQMn6L299HWy4GSN2hgHQM/FQ",
-    "public_path": "src/tea.ejoy.com/LR/smg/public",
-    "template_path": "src/tea.ejoy.com/LR/smg/app/views",
-    "database": {
-        "hosts": "localhost",
-        "database": "server"
-    }
-}

@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"os"
 
-	"tea.ejoy.com/LR/smg/app/controllers"
-	"tea.ejoy.com/LR/smg/app/core"
-	"tea.ejoy.com/LR/smg/app/utils"
+	"github.com/xjdrew/goweb/app/controllers"
+	"github.com/xjdrew/goweb/app/core"
+	"github.com/xjdrew/goweb/app/utils"
 )
 
 func usage() {

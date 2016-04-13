@@ -3,7 +3,7 @@ package controllers
 import (
 	"net/http"
 
-	"tea.ejoy.com/LR/smg/app/core"
+	"github.com/xjdrew/goweb/app/core"
 )
 
 type HomeController struct {

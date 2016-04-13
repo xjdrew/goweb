@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"tea.ejoy.com/LR/smg/app/utils"
-
 	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"gopkg.in/mgo.v2"
+
+	"github.com/xjdrew/goweb/app/utils"
 )
 
 type Controller struct {
