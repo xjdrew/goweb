@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/gorilla/context"
-	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 
 	"gopkg.in/mgo.v2"
@@ -29,7 +28,6 @@ const (
 type Application struct {
 	Settings  *Settings
 	Template  *template.Template
-	Router    *mux.Router
 	Store     *sessions.CookieStore
 	DBSession *mgo.Session
 }
@@ -68,10 +66,6 @@ func (app *Application) Init() {
 	app.loadTemplates()
 	app.initDatabase()
 	app.Store = sessions.NewCookieStore([]byte(app.Settings.Secret))
-
-	r := mux.NewRouter()
-	r.StrictSlash(true)
-	app.Router = r
 }
 
 func (app *Application) Fini() {

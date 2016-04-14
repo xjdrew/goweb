@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gorilla/mux"
+
 	"github.com/xjdrew/goweb/app/controllers"
 	"github.com/xjdrew/goweb/app/core"
 	"github.com/xjdrew/goweb/app/utils"
@@ -34,7 +36,8 @@ func main() {
 	app.Init()
 	defer app.Fini()
 
-	r := app.Router
+	r := mux.NewRouter()
+	r.StrictSlash(true)
 	hc := &controllers.HomeController{}
 	r.HandleFunc("/", app.WrapRoute(hc.Index))
 
